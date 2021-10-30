@@ -10,13 +10,15 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tName"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/eName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:hint="Your name"
-            android:textStyle="bold|italic"/>
+            android:hint="Your name/Site to search"
+            android:minHeight="48dp"
+            android:textStyle="bold|italic" />
         <Button
             android:id="@+id/bClick"
             android:layout_width="wrap_content"
@@ -37,5 +39,39 @@
         android:text="Hello there"
         android:textSize="20sp"/>
 
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_below="@id/tName"
+        android:orientation="horizontal"
+        >
 
+        <Button
+            android:id="@+id/bSearch"
+            android:text="Search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            />
+
+        <Button
+            android:id="@+id/bShare"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:text="Share" />
+
+    </LinearLayout>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonsLayout"
+        android:layout_marginTop="7dp"
+        android:minHeight="48dp" />
 </RelativeLayout>
