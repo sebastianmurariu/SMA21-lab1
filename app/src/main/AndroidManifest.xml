@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.lab1sma">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,21 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab1SMA">
         <activity
-            android:name=".intents.IntentFilter"
-            android:exported="true" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.OPENABLE"/>
-                <action android:name="Lab1SMA.LAUNCH" />
-                <data android:scheme="https:\\"/>
-                <data android:scheme="tel"/>
-            </intent-filter>
-
-        </activity>
+            android:name=".ImageActivity"
+            android:exported="true" />
         <activity
-            android:name=".intents.MainIntent"
+            android:name=".WebsearchActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,18 +23,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".lifecycle.ActA"
-            android:exported="true" />
-        <activity
-            android:name=".lifecycle.ActB"
-            android:exported="true" />
-        <activity
-            android:name=".lifecycle.ActC"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"/>
-
+            android:name=".ImageActivity"
+            android:exported="true"
+            tools:ignore="DuplicateActivity">
+        </activity>
     </application>
 
 </manifest>
