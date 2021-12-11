@@ -7,13 +7,13 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.lab4sma"
-        minSdk 18
+        applicationId "com.example.batteryapp"
+        minSdk 26
         targetSdk 31
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
