@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.lab1sma">
 
     <application
@@ -10,14 +11,40 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab1SMA">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".intents.IntentFilter"
+            android:exported="true" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.OPENABLE"/>
+                <action android:name="Lab1SMA.LAUNCH" />
+                <data android:scheme="https:\\"/>
+                <data android:scheme="tel"/>
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".intents.MainIntent"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".lifecycle.ActA"
+            android:exported="true" />
+        <activity
+            android:name=".lifecycle.ActB"
+            android:exported="true" />
+        <activity
+            android:name=".lifecycle.ActC"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

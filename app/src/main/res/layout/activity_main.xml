@@ -62,8 +62,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_weight="1"
             android:text="Share" />
+        />
 
     </LinearLayout>
 
@@ -74,4 +76,12 @@
         android:layout_below="@id/buttonsLayout"
         android:layout_marginTop="7dp"
         android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/lifecycle_screenswitch_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Go to lifecycle"
+        />
 </RelativeLayout>

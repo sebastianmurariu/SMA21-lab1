@@ -1,17 +1,19 @@
 package com.example.lab1sma
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.R.id
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import com.example.lab1sma.lifecycle.ActA
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         "Blue" to R.color.blue,
         "Green" to R.color.green
     )
-
+    private lateinit var btnSwitch: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,6 +50,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, colors.keys.toList())
         spinner.adapter = adapter
         spinner.onItemSelectedListener = this
+        btnSwitch = findViewById(R.id.lifecycle_screenswitch_button)
+        btnSwitch.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
@@ -55,6 +59,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
             btnClick.id -> sayHelloPressed()
             btnSearch.id -> searchPressed()
             btnShare.id -> sharePressed()
+            btnSwitch.id -> goToLifecyclesActivity()
         }
 
     }
@@ -122,5 +127,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, AdapterView.OnIt
             Toast.makeText(this, "Text must be filled", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    private fun goToLifecyclesActivity(){
+        val intent : Intent = Intent(this, ActA::class.java)
+        startActivity(intent)
     }
 }
