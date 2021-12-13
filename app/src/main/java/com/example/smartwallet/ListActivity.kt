@@ -1,5 +1,6 @@
 package com.example.smartwallet
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -17,9 +18,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 
 
-class ListActivity : AppCompatActivity(){
+class ListActivity : AppCompatActivity(), View.OnClickListener{
 
-    private val payments = ArrayList<String>()
+    private val payments = ArrayList<Payment>()
     private lateinit var listView: ListView
     private lateinit var tStatus: TextView
     private lateinit var bPrevious: Button
@@ -28,29 +29,27 @@ class ListActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-        payments.add("45.25")
-        payments.add("5.50")
-        payments.add("15.60")
-
-        val payments = ArrayList<Payment>()
-
         tStatus = findViewById(R.id.tStatus)
         bPrevious = findViewById(R.id.previousBtn)
         bNext = findViewById(R.id.nextBtn)
         fab = findViewById(R.id.fab)
+        fab.setOnClickListener(this)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         listView = findViewById(R.id.listView)
         val adapter = PaymentAdapter(this, R.layout.payment_item, payments)
-        listView.setAdapter(adapter);
-
+        listView.adapter = adapter;
         // setup firebase
         val db = FirebaseDatabase.getInstance();
-        val databaseReference = db.getReference();
+        val databaseReference = db.reference;
 
-        databaseReference.child("wallet").addChildEventListener(object : ChildEventListener {
+        databaseReference.child("payments").addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val addedPayment = snapshot.getValue(Payment::class.java)
                 if (addedPayment != null) {
-                    addedPayment.timestamp = snapshot.key.toString()
                     payments.add(addedPayment)
                     adapter.notifyDataSetChanged()
                 }
@@ -74,6 +73,14 @@ class ListActivity : AppCompatActivity(){
             }
         })
     }
+    override fun onClick(v: View?) {
+        when(v!!.id){
+            R.id.fab -> goToAddActivity()
+        }
+    }
 
+    private fun goToAddActivity(){
+        startActivity(Intent(this,AddActivity::class.java))
+    }
 
 }
