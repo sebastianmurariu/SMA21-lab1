@@ -1,2 +1,2 @@
 # SMA21-lab
-SMA 2021 - Laborator 6
+SMA 2021 - Laborator 8
