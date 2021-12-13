@@ -174,8 +174,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val selectedItem = spinner.selectedItemPosition
         val monthlyExpenses = MonthlyExpenses(
             currentMonth,
-            eExpenses.text.toString().toDouble().roundToInt(),
-            eIncome.text.toString().toDouble().roundToInt()
+            eExpenses.text.toString().toDouble(),
+            eIncome.text.toString().toDouble()
         )
         databaseReference.child("calendar")
             .child(monthlyExpenses.month)
