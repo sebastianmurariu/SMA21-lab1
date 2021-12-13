@@ -1,4 +1,4 @@
-package com.example.batteryapp
+package com.example.smartwallet
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

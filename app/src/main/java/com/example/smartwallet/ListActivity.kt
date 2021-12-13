@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.smartwallet.adapter.PaymentAdapter
 import com.example.smartwallet.model.Payment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,6 +18,9 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
 
 
 class ListActivity : AppCompatActivity(), View.OnClickListener{
@@ -27,6 +31,8 @@ class ListActivity : AppCompatActivity(), View.OnClickListener{
     private lateinit var bPrevious: Button
     private lateinit var bNext: Button
     private lateinit var fab: FloatingActionButton
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mAuthListener: FirebaseAuth.AuthStateListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -35,16 +41,39 @@ class ListActivity : AppCompatActivity(), View.OnClickListener{
         bNext = findViewById(R.id.nextBtn)
         fab = findViewById(R.id.fab)
         fab.setOnClickListener(this)
+        checkAuth()
+    }
 
+    private fun checkAuth() {
+        mAuth = FirebaseAuth.getInstance()
+        mAuthListener = object : FirebaseAuth.AuthStateListener {
+            override fun onAuthStateChanged(firebaseAuth: FirebaseAuth) {
+                val user: FirebaseUser? = firebaseAuth.currentUser
+                if (user != null) {
+                    val tLoginDetail = findViewById<TextView>(R.id.tLoginDetail)
+                    val tUser = findViewById<TextView>(R.id.tUser)
+                    tLoginDetail.text = "Firebase ID: ${user.uid}"
+                    tUser.text = "Email:  ${user.email}"
+                    attachDBListener(user.uid)
+                } else {
+                    val contract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                        Toast.makeText(this@ListActivity, "Login successful!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    val intent = Intent(this@ListActivity,LoginActivity::class.java)
+                    contract.launch(intent)
+                }
+            }
+        }
     }
 
     override fun onStart() {
         super.onStart()
+        mAuth.addAuthStateListener(mAuthListener);
         listView = findViewById(R.id.listView)
         val adapter = PaymentAdapter(this, R.layout.payment_item, payments)
-        listView.adapter = adapter;
-        // setup firebase
-        val db = FirebaseDatabase.getInstance();
+        listView.adapter = adapter
+        val db = FirebaseDatabase.getInstance()
         val databaseReference = db.reference;
 
         databaseReference.child("payments").addChildEventListener(object : ChildEventListener {
@@ -97,6 +126,35 @@ class ListActivity : AppCompatActivity(), View.OnClickListener{
             }
         }
     }
+
+    private fun attachDBListener(uid: String) {
+        // setup firebase database
+        val database = FirebaseDatabase.getInstance()
+        val databaseReference = database.reference
+        databaseReference.child("wallet").child(uid)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                } //...
+            })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mAuth.removeAuthStateListener(mAuthListener)
+    }
+
     override fun onClick(v: View?) {
         when(v!!.id){
             R.id.fab -> goToAddActivity()
