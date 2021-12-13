@@ -9,6 +9,7 @@ import android.widget.Button
 
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.smartwallet.adapter.PaymentAdapter
 import com.example.smartwallet.model.Payment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class ListActivity : AppCompatActivity(), View.OnClickListener{
 
-    private val payments = ArrayList<Payment>()
+    private var payments = ArrayList<Payment>()
     private lateinit var listView: ListView
     private lateinit var tStatus: TextView
     private lateinit var bPrevious: Button
@@ -56,6 +57,18 @@ class ListActivity : AppCompatActivity(), View.OnClickListener{
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val payment: Payment? = snapshot.getValue(Payment::class.java)
+                if (payment != null) {
+                    payment.timestamp = snapshot.key.toString()
+                    AppState.updateLocalBackup(applicationContext, payment, true)
+                    for (p in payments) {
+                        if (p.timestamp == payment.timestamp) {
+                            payments[payments.indexOf(p)] = payment
+                            break
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
+                }
             }
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -72,6 +85,17 @@ class ListActivity : AppCompatActivity(), View.OnClickListener{
             override fun onCancelled(error: DatabaseError) {
             }
         })
+
+        if (!AppState.isNetworkAvailable(this)) {
+            if (AppState.hasLocalStorage(this)) {
+                payments = AppState.loadFromLocalBackup(this)
+                tStatus.text = "There are " + payments.size + " payments backed up"
+            } else {
+                Toast.makeText(this, "The app has no files in the local storage", Toast.LENGTH_SHORT)
+                    .show()
+                return
+            }
+        }
     }
     override fun onClick(v: View?) {
         when(v!!.id){
